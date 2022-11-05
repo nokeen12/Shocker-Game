@@ -6,6 +6,10 @@ body {
     background-color: black;
     color: white;
     overflow: hidden;
+    cursor: none;
+}
+::selection {
+    background-color: transparent;
 }
 /* Start */
 .start{
@@ -55,6 +59,32 @@ h1 > *{
         0 0 40px darkorange,
         0 0 80px darkorange,
         0 0 160px darkorange;
+    }
+}
+
+/* Cursor */
+#cursor{
+    z-index: 1;
+    width: 20px;
+    height: 20px;
+    border: 1px solid white;
+    border-radius:50%;
+    position: absolute;
+    pointer-events: none;
+}
+.expand {
+    animation: cursorAnim 400ms forwards;
+    border: 1px solid gray;
+}
+@keyframes cursorAnim {
+    0% {
+        transform: scale(1);
+    }
+    50%{
+        transform: scale(2);
+    }
+    100%{
+        transform: scale(1);
     }
 }
 
