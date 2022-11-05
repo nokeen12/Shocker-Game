@@ -7,7 +7,56 @@ body {
     color: white;
     overflow: hidden;
 }
-
+/* Start */
+.start{
+    animation: fade 2s linear infinite;
+}
+@keyframes fade{
+    0%, 100%{
+        opacity: 0;
+    }
+    50%{
+        opacity: 1;
+    }
+}
+/* Title */
+#title{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+h1{
+    line-height: 4rem;
+    margin-bottom: 4rem;
+    font-size: 5rem;
+    -webkit-box-reflect: below 1px linear-gradient(transparent, #0004);
+    color: #fff;
+    text-shadow: 0 0 10px darkorange,
+    0 0 20px darkorange,
+    0 0 40px darkorange,
+    0 0 80px darkorange,
+    0 0 160px darkorange;
+}
+h1 > *{
+    animation: flicker 5s linear infinite;
+}
+@keyframes flicker{
+    0%, 18%, 26.1%, 30%, 60.1%, 92%{
+        color: #5a3318;
+        text-shadow: none;
+    }
+    18.1%, 26%, 30.1%, 60%, 92.1%, 100%{
+        color: #fff;
+        text-shadow: 0 0 10px darkorange,
+        0 0 20px darkorange,
+        0 0 40px darkorange,
+        0 0 80px darkorange,
+        0 0 160px darkorange;
+    }
+}
 
 /* Loading Screen */
 .loader-wrapper {
