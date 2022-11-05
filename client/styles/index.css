@@ -65,18 +65,21 @@ h1{
     font-size: 5rem;
     -webkit-box-reflect: below 1px linear-gradient(transparent, #0004);
     color: #fff;
+    width: 100%;
+    text-align: center;
     text-shadow: 0 0 10px darkorange,
     0 0 20px darkorange,
     0 0 40px darkorange,
     0 0 80px darkorange,
     0 0 160px darkorange;
+    outline: none;
 }
 h1 > *{
     animation: flicker 5s linear infinite;
 }
 @keyframes flicker{
     0%, 18%, 26.1%, 30%, 60.1%, 92%{
-        color: #5a3318;
+        color: rgb(41, 41, 41);
         text-shadow: none;
     }
     18.1%, 26%, 30.1%, 60%, 92.1%, 100%{
