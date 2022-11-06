@@ -34,14 +34,16 @@ class CharacterObject {
     }
 }
 class LaserObject {
-    constructor(x, y, width, height, state, canvasContext, color){
+    constructor(x, y, width, height, state, direction, canvasContext, color){
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.state = state;
+        this.direction = direction;
         this.ctx = canvasContext;
         this.color = color;
+        this.timer = 1000;
     }
     draw(){
         this.ctx.fillStyle = this.color;
@@ -49,6 +51,8 @@ class LaserObject {
     }
     update(){
         this.draw();
+        this.timer -= 1;
+        this.timer < 500 ? this.state = true : null
     }
 }
 class PointObject {
@@ -78,11 +82,13 @@ window.onload = () => {
         setTimeout(() => {
             const myCanvas = document.querySelector('canvas');
             const ctx = myCanvas.getContext('2d');
+            myCanvas.style.visibility = 'hidden';
+            document.getElementById('score').style.visibility = 'hidden';
             menu.style.visibility = 'visible';
             ctx.fillStyle = "blue";
             ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
             totalFrameCount = 0;
-            let laserArray = [];
+            laserArray = [];
             started = false
         }, 5000)
     }
@@ -100,7 +106,7 @@ window.onload = () => {
             setTimeout(() =>{
                 started = true;
                 menu.style.visibility = 'hidden';
-                document.getElementById('canvas').style.visibility = 'visible';
+                myCanvas.style.visibility = 'visible';
                 document.getElementById('score').style.visibility = 'visible';
                 startGame();
             },500)
@@ -124,35 +130,46 @@ window.onload = () => {
         //will update objects ingame and collision detection
         function updateGame(){
             frames = totalFrameCount++;
-            if(totalFrameCount % 200 === 0){
+            if(totalFrameCount % 1000 === 0){
                 let x;
                 let y;
-                let state;
+                let direction;
                 if (Math.random() < 0.5){
                     x = 0;
                     y = Math.random()*myCanvas.height;
-                    state = 0;
+                    direction = 0;
                 }else{
                     x = Math.random() * myCanvas.width;
                     y = 0;
-                    state = 1;
+                    direction = 1;
                 }
-                if(state == 0){
-                    laserArray.push(new LaserObject(x, y, myCanvas.width, myCanvas.width/20, state, ctx, 'red'))
+                if(direction == 0){
+                    laserArray.push(new LaserObject(x, y, myCanvas.width, myCanvas.width/20, false, direction, ctx, 'red'))
                 }else{
-                    laserArray.push(new LaserObject(x, y, myCanvas.width/20, myCanvas.height, state, ctx, 'red'))
+                    laserArray.push(new LaserObject(x, y, myCanvas.width/20, myCanvas.height, false, direction, ctx, 'red'))
                 }
             }
             laserArray.forEach((laser, index) => {
                 laser.update()
                 //laser and player collision
-                const distBetween = Math.hypot(player.x - laser.x, player.y - laser.y)
-                if(distBetween-laser.width/2-player.width/2<1){
-                    //   runGame = false;
-                    //   reset();
-                    console.log('game over')
+                if(laser.direction === 1){
+                    if(laser.state && Math.abs(laser.x-player.x)<20){
+                        runGame = false;
+                        reset();
+                        console.log('game over')
+                    }
+                }else{
+                    if(laser.state && Math.abs(laser.y-player.y)<20){
+                        runGame = false;
+                        reset();
+                        console.log('game over')
+                    }
                 }
-                //updates each bullet and detects collision
+                setTimeout(() =>{
+                    if(laserArray[index].timer < 1){
+                        laserArray.splice(index, 1);
+                    }
+                }, 0)
             })
         }
         
