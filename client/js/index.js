@@ -88,6 +88,7 @@ window.onload = () => {
             ctx.fillStyle = "blue";
             ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
             totalFrameCount = 0;
+            document.querySelector("#score span").innerHTML = 0;
             laserArray = [];
             pointArray = [];
             started = false
@@ -181,10 +182,11 @@ window.onload = () => {
                 point.draw()
                 //point and player collision
                 const distBetween = Math.hypot(point.x - (player.x+player.width/2), point.y - (player.y+player.height/2))
-                if(distBetween-player.width-point.radius<1){
+                if(distBetween-player.width/2-point.radius/2<1){
                     setTimeout(() =>{
-                        console.log(point.id)
                         pointArray = pointArray.filter(e => e.id !== point.id)
+                        score += 10;
+                        points.innerHTML = score;
                     }, 0)
                 }
             })
