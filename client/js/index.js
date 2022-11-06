@@ -62,7 +62,9 @@ class LaserObject {
         this.lid = lid
     }
     draw(){
-        this.ctx.fillStyle = this.color;
+        this.ctx.fillStyle = 'orange';
+        if(this.timer < 130)this.ctx.fillStyle = 'white';
+        if(this.timer < 100)this.ctx.fillStyle = this.color
         if(this.direction == 1){
             this.timer < 100 ? this.ctx.fillRect(this.x, this.y, this.width, this.height) : this.ctx.fillRect(this.x+this.width/2, this.y, 5, this.height)
         }else{
@@ -105,7 +107,7 @@ window.onload = () => {
             myCanvas.style.visibility = 'hidden';
             document.getElementById('score').style.visibility = 'hidden';
             menu.style.visibility = 'visible';
-            ctx.fillStyle = "blue";
+            ctx.fillStyle = "black";
             ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
             totalFrameCount = 0;
             document.querySelector("#score span").innerHTML = 0;
@@ -122,7 +124,7 @@ window.onload = () => {
             const myCanvas = document.querySelector('canvas');
             const ctx = myCanvas.getContext('2d');
             menu.style.visibility = 'visible';
-            ctx.fillStyle = "blue";
+            ctx.fillStyle = "black";
             ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
 
             setTimeout(() =>{
@@ -164,10 +166,10 @@ window.onload = () => {
                 lid++
                 if (Math.random() < 0.5){
                     x = 0;
-                    y = Math.random()*myCanvas.height;
+                    y = Math.random()*(myCanvas.height-(player.height/2));
                     direction = 0;
                 }else{
-                    x = Math.random() * myCanvas.width;
+                    x = Math.random()*(myCanvas.width-(player.width/2));
                     y = 0;
                     direction = 1;
                 }
@@ -181,7 +183,7 @@ window.onload = () => {
                 id++;
                 pointArray.push(new PointObject(Math.random()*myCanvas.height, Math.random()*myCanvas.width, player.width/6, ctx, 'white', id))
             }
-            laserArray.forEach((laser, index) => {
+            laserArray.forEach((laser) => {
                 laser.update()
                 //laser and player collision
                 if(laser.direction === 1){
@@ -225,7 +227,7 @@ window.onload = () => {
                 //update player position
                 player.updatePosition();
                 //clear canvas
-                ctx.fillStyle = 'blue';
+                ctx.fillStyle = 'black';
                 ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
                 //redraw player
                 player.draw();
