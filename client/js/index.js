@@ -14,11 +14,11 @@ class CharacterObject {
     updatePosition(){
         if(this.x <= 0){
             this.x += 2;  
-        }if((this.x+this.width) >= 800){
+        }if((this.x+this.width) >= document.querySelector('canvas').width){
             this.x -= 2;
         }if(this.y <= 0){
             this.y += 2;  
-        }if((this.y+this.height) >= 800){
+        }if((this.y+this.height) >= document.querySelector('canvas').height){
             this.y -= 2;
         }
         else{
