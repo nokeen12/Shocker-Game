@@ -47,7 +47,7 @@ class CharacterObject {
     }
 }
 class LaserObject {
-    constructor(x, y, width, height, state, direction, canvasContext, color){
+    constructor(x, y, width, height, state, direction, canvasContext, color, timer, lid){
         this.x = x;
         this.y = y;
         this.pw = 20;
@@ -58,7 +58,8 @@ class LaserObject {
         this.direction = direction;
         this.ctx = canvasContext;
         this.color = color;
-        this.timer = 500;
+        this.timer = timer;
+        this.lid = lid
     }
     draw(){
         this.ctx.fillStyle = this.color;
@@ -148,14 +149,19 @@ window.onload = () => {
         let score = 0;
         let points = document.querySelector("#score span");
         let id = 0;
+        let lid = 0; //laser id
+        let difficulty = 1;
         //will update objects ingame and collision detection
         function updateGame(){
             frames = totalFrameCount++;
-            
-            if(totalFrameCount % 500 === 0){
+            if(totalFrameCount % 1000 === 0){
+                difficulty++;
+            }
+            if(totalFrameCount % (500/difficulty*3) === 0){
                 let x;
                 let y;
                 let direction;
+                lid++
                 if (Math.random() < 0.5){
                     x = 0;
                     y = Math.random()*myCanvas.height;
@@ -166,9 +172,9 @@ window.onload = () => {
                     direction = 1;
                 }
                 if(direction == 0){
-                    laserArray.push(new LaserObject(x, y, myCanvas.width, myCanvas.width/20, false, direction, ctx, 'red'))
+                    laserArray.push(new LaserObject(x, y, myCanvas.width, myCanvas.width/20, false, direction, ctx, 'red', 500, lid))
                 }else{
-                    laserArray.push(new LaserObject(x, y, myCanvas.width/20, myCanvas.height, false, direction, ctx, 'red'))
+                    laserArray.push(new LaserObject(x, y, myCanvas.width/20, myCanvas.height, false, direction, ctx, 'red', 500, lid))
                 }
             }
             if(totalFrameCount % 250 === 0){
@@ -192,8 +198,9 @@ window.onload = () => {
                     }
                 }
                 setTimeout(() =>{
-                    if(laserArray[index].timer < 1){
-                        laserArray.splice(index, 1);
+                    if(laser.timer < 2){
+                        // laserArray.splice(index, 1);
+                        laserArray = laserArray.filter(e => e.lid !== laser.lid)
                     }
                 }, 0)
             })

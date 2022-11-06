@@ -40,7 +40,7 @@ canvas{
     height: 100%;
 }
 #score{
-    position: absolute;
+    position: relative;
     visibility: hidden;
 }
 /* Start */
