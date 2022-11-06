@@ -6,7 +6,7 @@ This project was made for the MLH hackathon: 'Hack-Cade 2'
 
 ## How to run application
 
-1. Play now at (link)
+1. Play now at `https://nokeen12.github.io/Shocker-Game/`
 
 or
 
@@ -15,7 +15,7 @@ or
 
 ### Tech
 
-JavaScript, MongoDB, Express, Node.js, HTML, CSS
+JavaScript, HTML, CSS
 
 
 ## About
