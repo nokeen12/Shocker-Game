@@ -50,8 +50,6 @@ class LaserObject {
     constructor(x, y, width, height, state, direction, canvasContext, color, timer, lid){
         this.x = x;
         this.y = y;
-        this.pw = 20;
-        this.ph = 20;
         this.width = width;
         this.height = height;
         this.state = state;
@@ -66,9 +64,9 @@ class LaserObject {
         if(this.timer < 130)this.ctx.fillStyle = 'white';
         if(this.timer < 105)this.ctx.fillStyle = this.color
         if(this.direction == 1){
-            this.timer < 100 ? this.ctx.fillRect(this.x, this.y, this.width, this.height) : this.ctx.fillRect(this.x+this.width/2, this.y, 5, this.height)
+            this.timer < 105 ? this.ctx.fillRect(this.x, this.y, this.width, this.height) : this.ctx.fillRect(this.x+this.width/2, this.y, 5, this.height)
         }else{
-            this.timer < 100 ? this.ctx.fillRect(this.x, this.y, this.width, this.height) : this.ctx.fillRect(this.x, this.y+this.height/2, this.width, 5)
+            this.timer < 105 ? this.ctx.fillRect(this.x, this.y, this.width, this.height) : this.ctx.fillRect(this.x, this.y+this.height/2, this.width, 5)
         }
     }
     update(){
@@ -215,14 +213,14 @@ window.onload = () => {
                 laser.update()
                 //laser and player collision
                 if(laser.direction === 1){
-                    if(laser.state && Math.abs(laser.x-player.x)<20){
+                    if(laser.state && Math.abs(laser.x-player.x)<player.width){
                         zapSound.play();
                         runGame = false;
                         reset();
                         console.log('game over')
                     }
                 }else{
-                    if(laser.state && Math.abs(laser.y-player.y)<20){
+                    if(laser.state && Math.abs(laser.y-player.y)<player.height){
                         zapSound.play();
                         runGame = false;
                         reset();
