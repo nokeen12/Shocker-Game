@@ -91,7 +91,10 @@ class PointObject {
     draw(){
         this.ctx.beginPath();
         this.toggle ? this.ctx.fillStyle = this.color: this.ctx.fillStyle = 'grey';
-        if(this.animation % 200 == 0) this.toggle = !this.toggle
+        if(this.animation % 200 == 0){
+            this.toggle = !this.toggle;
+            // laserSound.play();
+        }
         this.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
         this.ctx.fill()
     }
@@ -100,6 +103,14 @@ class PointObject {
         this.animation += 1;
     }
 }
+const gameMusic = new Audio('./audio/Algorithm.mp3')
+const laserSound = new Audio('./audio/Laser.mp3')
+const pointSound = new Audio('./audio/Points.mp3')
+const zapSound = new Audio('./audio/Zap.mp3')
+gameMusic.loop = true;
+gameMusic.volume = .1;
+laserSound.volume = .3;
+zapSound.volume = .3;
 window.onload = () => {
     $(".loader-wrapper").fadeOut("slow");
     //create a starting frame count of zero
@@ -122,7 +133,18 @@ window.onload = () => {
         }, 5000)
     }
     const menu = document.getElementById('main-menu');
+    const mute = document.querySelector('#mute-toggle');
     let started = false
+    mute.onclick = () =>{
+        if(mute.innerHTML == 'Unmuted'){
+            gameMusic.muted = true;
+            mute.innerHTML = 'Muted'
+        }else{
+            gameMusic.muted = false;
+            mute.innerHTML = 'Unmuted'
+            gameMusic.play(); 
+        }
+    }
     document.addEventListener('keydown', (e)=>{
         if(started == false && e.key == ' '){
             
@@ -194,12 +216,14 @@ window.onload = () => {
                 //laser and player collision
                 if(laser.direction === 1){
                     if(laser.state && Math.abs(laser.x-player.x)<20){
+                        zapSound.play();
                         runGame = false;
                         reset();
                         console.log('game over')
                     }
                 }else{
                     if(laser.state && Math.abs(laser.y-player.y)<20){
+                        zapSound.play();
                         runGame = false;
                         reset();
                         console.log('game over')
@@ -217,6 +241,7 @@ window.onload = () => {
                 const distBetween = Math.hypot(point.x - (player.x+player.width/2), point.y - (player.y+player.height/2))
                 if(distBetween-player.width/2-point.radius/2<1){
                     setTimeout(() =>{
+                        pointSound.play()
                         pointArray = pointArray.filter(e => e.id !== point.id)
                         score += 10;
                         points.innerHTML = score;

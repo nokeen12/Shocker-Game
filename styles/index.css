@@ -43,6 +43,9 @@ canvas{
     position: relative;
     visibility: hidden;
 }
+#mute-toggle{
+    position: relative;
+}
 /* Start */
 .start{
     animation: fade 2s linear infinite;
