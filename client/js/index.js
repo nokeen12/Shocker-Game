@@ -50,6 +50,8 @@ class LaserObject {
     constructor(x, y, width, height, state, direction, canvasContext, color){
         this.x = x;
         this.y = y;
+        this.pw = 20;
+        this.ph = 20;
         this.width = width;
         this.height = height;
         this.state = state;
@@ -60,12 +62,16 @@ class LaserObject {
     }
     draw(){
         this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.x, this.y, this.width, this.height)
+        if(this.direction == 1){
+            this.timer < 100 ? this.ctx.fillRect(this.x, this.y, this.width, this.height) : this.ctx.fillRect(this.x+this.width/2, this.y, 5, this.height)
+        }else{
+            this.timer < 100 ? this.ctx.fillRect(this.x, this.y, this.width, this.height) : this.ctx.fillRect(this.x, this.y+this.height/2, this.width, 5)
+        }
     }
     update(){
         this.draw();
         this.timer -= 1;
-        this.timer < 250 ? this.state = true : null
+        this.timer < 100 ? this.state = true : null
     }
 }
 class PointObject {
