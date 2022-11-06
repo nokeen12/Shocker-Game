@@ -64,7 +64,7 @@ class LaserObject {
     draw(){
         this.ctx.fillStyle = 'orange';
         if(this.timer < 130)this.ctx.fillStyle = 'white';
-        if(this.timer < 100)this.ctx.fillStyle = this.color
+        if(this.timer < 105)this.ctx.fillStyle = this.color
         if(this.direction == 1){
             this.timer < 100 ? this.ctx.fillRect(this.x, this.y, this.width, this.height) : this.ctx.fillRect(this.x+this.width/2, this.y, 5, this.height)
         }else{
@@ -85,12 +85,19 @@ class PointObject {
         this.ctx = canvasContext;
         this.color = color;
         this.id = id
+        this.animation = 1;
+        this.toggle = true;
     }
     draw(){
         this.ctx.beginPath();
-        this.ctx.fillStyle = this.color;
+        this.toggle ? this.ctx.fillStyle = this.color: this.ctx.fillStyle = 'grey';
+        if(this.animation % 200 == 0) this.toggle = !this.toggle
         this.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
         this.ctx.fill()
+    }
+    update(){
+        this.draw()
+        this.animation += 1;
     }
 }
 window.onload = () => {
@@ -105,12 +112,10 @@ window.onload = () => {
             const myCanvas = document.querySelector('canvas');
             const ctx = myCanvas.getContext('2d');
             myCanvas.style.visibility = 'hidden';
-            document.getElementById('score').style.visibility = 'hidden';
             menu.style.visibility = 'visible';
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
             totalFrameCount = 0;
-            document.querySelector("#score span").innerHTML = 0;
             laserArray = [];
             pointArray = [];
             started = false
@@ -131,6 +136,7 @@ window.onload = () => {
                 started = true;
                 menu.style.visibility = 'hidden';
                 myCanvas.style.visibility = 'visible';
+                document.querySelector("#score span").innerHTML = 0;
                 document.getElementById('score').style.visibility = 'visible';
                 startGame();
             },500)
@@ -181,7 +187,7 @@ window.onload = () => {
             }
             if(totalFrameCount % 250 === 0){
                 id++;
-                pointArray.push(new PointObject(Math.random()*myCanvas.height, Math.random()*myCanvas.width, player.width/6, ctx, 'white', id))
+                pointArray.push(new PointObject(Math.random()*(myCanvas.height-(player.height/2)), Math.random()*(myCanvas.width-(player.width/2)), player.width/6, ctx, 'white', id))
             }
             laserArray.forEach((laser) => {
                 laser.update()
@@ -201,13 +207,12 @@ window.onload = () => {
                 }
                 setTimeout(() =>{
                     if(laser.timer < 2){
-                        // laserArray.splice(index, 1);
                         laserArray = laserArray.filter(e => e.lid !== laser.lid)
                     }
                 }, 0)
             })
-            pointArray.forEach((point, index) => {
-                point.draw()
+            pointArray.forEach((point) => {
+                point.update()
                 //point and player collision
                 const distBetween = Math.hypot(point.x - (player.x+player.width/2), point.y - (player.y+player.height/2))
                 if(distBetween-player.width/2-point.radius/2<1){

@@ -11,14 +11,19 @@ This project was made for the MLH hackathon: 'Hack-Cade 2'
 or
 
 1. Clone this project
-2. Inside the client folder, install dependencies with the command - `npm install`
-3. Run `npm start` in the client folder to start the application on http://localhost:3000/
+2. Open live server and visit `http://127.0.0.1:5500/client/index.html`
 
 ### Tech
 
 JavaScript, MongoDB, Express, Node.js, HTML, CSS
 
 
-## Images
+## About
 
-Empty for now
+![Homescreen](images/Shocker.png)
+
+Shocker, the game were you avoid getting shocked!
+
+![Gameplay](images/Zap.png)
+
+Use WASD or Arrow Keys to move around and collect points while dodging the random lasers that are out to get you.
