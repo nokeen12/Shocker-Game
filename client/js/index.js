@@ -1,3 +1,16 @@
+function setSize(){
+    if(window.innerWidth < window.innerHeight){
+        document.getElementById("game-box").style.width = '90vw';
+        document.getElementById("game-box").style.height = document.getElementById("game-box").style.width
+    }else{
+        document.getElementById("game-box").style.height = '90vh';
+        document.getElementById("game-box").style.width = document.getElementById("game-box").style.height;
+    }
+}
+setSize()
+window.addEventListener('resize', (e)=>{
+    setSize()
+})
 class CharacterObject {
     constructor(x, y, width, height, canvasContext, color) {
         this.x = x;
@@ -13,13 +26,13 @@ class CharacterObject {
     }
     updatePosition(){
         if(this.x <= 0){
-            this.x += 2;  
+            this.x += 4;  
         }if((this.x+this.width) >= document.querySelector('canvas').width){
-            this.x -= 2;
+            this.x -= 4;
         }if(this.y <= 0){
-            this.y += 2;  
+            this.y += 4;  
         }if((this.y+this.height) >= document.querySelector('canvas').height){
-            this.y -= 2;
+            this.y -= 4;
         }
         else{
             this.x += this.vxl;
@@ -43,7 +56,7 @@ class LaserObject {
         this.direction = direction;
         this.ctx = canvasContext;
         this.color = color;
-        this.timer = 1000;
+        this.timer = 500;
     }
     draw(){
         this.ctx.fillStyle = this.color;
@@ -52,7 +65,7 @@ class LaserObject {
     update(){
         this.draw();
         this.timer -= 1;
-        this.timer < 500 ? this.state = true : null
+        this.timer < 250 ? this.state = true : null
     }
 }
 class PointObject {
@@ -133,7 +146,7 @@ window.onload = () => {
         function updateGame(){
             frames = totalFrameCount++;
             
-            if(totalFrameCount % 1000 === 0){
+            if(totalFrameCount % 500 === 0){
                 let x;
                 let y;
                 let direction;
@@ -152,7 +165,7 @@ window.onload = () => {
                     laserArray.push(new LaserObject(x, y, myCanvas.width/20, myCanvas.height, false, direction, ctx, 'red'))
                 }
             }
-            if(totalFrameCount % 500 === 0){
+            if(totalFrameCount % 250 === 0){
                 id++;
                 pointArray.push(new PointObject(Math.random()*myCanvas.height, Math.random()*myCanvas.width, player.width/6, ctx, 'white', id))
             }
@@ -209,30 +222,30 @@ window.onload = () => {
         
         //player movement
         document.addEventListener('keydown', (event) => {
-            // if(started){
+            if(started){
                 switch(event.code){
                     case 'ArrowLeft':
                     case 'KeyA':
-                        player.vxl = -1;
+                        player.vxl = -2;
                         break;
                     case 'ArrowRight':
                     case 'KeyD':
-                        player.vxr = 1;
+                        player.vxr = 2;
                         break;
                     case 'ArrowUp':
                     case 'KeyW':
-                        player.vyu = -1;
+                        player.vyu = -2;
                         break;
                     case 'ArrowDown':
                     case 'KeyS':
-                        player.vyd = 1;
+                        player.vyd = 2;
                         break;
                 }
-            // }
+            }
         });
         //stop the player if no key is pressed
         document.addEventListener('keyup', (event) => {
-            // if(started){
+            if(started){
                 switch(event.code){
                 case 'ArrowLeft':
                 case 'KeyA':
@@ -251,7 +264,7 @@ window.onload = () => {
                     player.vyd = 0;
                     break;
                 }
-            // }
+            }
         });
     }
     const cursor = document.getElementById("cursor");
