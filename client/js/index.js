@@ -33,12 +33,46 @@ class CharacterObject {
         this.ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 }
-
+class LaserObject {
+    constructor(x, y, width, height, state, canvasContext, color){
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.state = state;
+        this.ctx = canvasContext;
+        this.color = color;
+    }
+    draw(){
+        this.ctx.fillStyle = this.color;
+        this.ctx.fillRect(this.x, this.y, this.width, this.height)
+    }
+    update(){
+        this.draw();
+    }
+}
+class PointObject {
+    constructor(x, y, width, height, canvasContext, color){
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.ctx = canvasContext;
+        this.color = color;
+    }
+    draw(){
+        this.ctx.fillStyle = this.color;
+        this.ctx.fillRect(this.x, this.y, this.width, this.height)
+    }
+    update(){
+        this.draw();
+    }
+}
 window.onload = () => {
     $(".loader-wrapper").fadeOut("slow");
     //create a starting frame count of zero
     let totalFrameCount = 0;
-
+    let laserArray = [];
     //reset game when player dies/loses
     function reset(){
         setTimeout(() => {
@@ -48,6 +82,8 @@ window.onload = () => {
             ctx.fillStyle = "blue";
             ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
             totalFrameCount = 0;
+            let laserArray = [];
+            started = false
         }, 5000)
     }
     const menu = document.getElementById('main-menu');
@@ -88,6 +124,36 @@ window.onload = () => {
         //will update objects ingame and collision detection
         function updateGame(){
             frames = totalFrameCount++;
+            if(totalFrameCount % 200 === 0){
+                let x;
+                let y;
+                let state;
+                if (Math.random() < 0.5){
+                    x = 0;
+                    y = Math.random()*myCanvas.height;
+                    state = 0;
+                }else{
+                    x = Math.random() * myCanvas.width;
+                    y = 0;
+                    state = 1;
+                }
+                if(state == 0){
+                    laserArray.push(new LaserObject(x, y, myCanvas.width, myCanvas.width/20, state, ctx, 'red'))
+                }else{
+                    laserArray.push(new LaserObject(x, y, myCanvas.width/20, myCanvas.height, state, ctx, 'red'))
+                }
+            }
+            laserArray.forEach((laser, index) => {
+                laser.update()
+                //laser and player collision
+                const distBetween = Math.hypot(player.x - laser.x, player.y - laser.y)
+                if(distBetween-laser.width/2-player.width/2<1){
+                    //   runGame = false;
+                    //   reset();
+                    console.log('game over')
+                }
+                //updates each bullet and detects collision
+            })
         }
         
         let runGame = true;
@@ -101,6 +167,7 @@ window.onload = () => {
                 ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
                 //redraw player
                 player.draw();
+                updateGame();
             }
         }
         
