@@ -56,20 +56,19 @@ class LaserObject {
     }
 }
 class PointObject {
-    constructor(x, y, width, height, canvasContext, color){
+    constructor(x, y, radius, canvasContext, color, id){
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
+        this.radius = radius;
         this.ctx = canvasContext;
         this.color = color;
+        this.id = id
     }
     draw(){
+        this.ctx.beginPath();
         this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.x, this.y, this.width, this.height)
-    }
-    update(){
-        this.draw();
+        this.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
+        this.ctx.fill()
     }
 }
 window.onload = () => {
@@ -77,6 +76,7 @@ window.onload = () => {
     //create a starting frame count of zero
     let totalFrameCount = 0;
     let laserArray = [];
+    let pointArray = [];
     //reset game when player dies/loses
     function reset(){
         setTimeout(() => {
@@ -89,6 +89,7 @@ window.onload = () => {
             ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
             totalFrameCount = 0;
             laserArray = [];
+            pointArray = [];
             started = false
         }, 5000)
     }
@@ -126,10 +127,11 @@ window.onload = () => {
         var frames;
         let score = 0;
         let points = document.querySelector("#score span");
-        
+        let id = 0;
         //will update objects ingame and collision detection
         function updateGame(){
             frames = totalFrameCount++;
+            
             if(totalFrameCount % 1000 === 0){
                 let x;
                 let y;
@@ -148,6 +150,10 @@ window.onload = () => {
                 }else{
                     laserArray.push(new LaserObject(x, y, myCanvas.width/20, myCanvas.height, false, direction, ctx, 'red'))
                 }
+            }
+            if(totalFrameCount % 500 === 0){
+                id++;
+                pointArray.push(new PointObject(Math.random()*myCanvas.height, Math.random()*myCanvas.width, player.width/6, ctx, 'white', id))
             }
             laserArray.forEach((laser, index) => {
                 laser.update()
@@ -170,6 +176,17 @@ window.onload = () => {
                         laserArray.splice(index, 1);
                     }
                 }, 0)
+            })
+            pointArray.forEach((point, index) => {
+                point.draw()
+                //point and player collision
+                const distBetween = Math.hypot(point.x - (player.x+player.width/2), point.y - (player.y+player.height/2))
+                if(distBetween-player.width-point.radius<1){
+                    setTimeout(() =>{
+                        console.log(point.id)
+                        pointArray = pointArray.filter(e => e.id !== point.id)
+                    }, 0)
+                }
             })
         }
         
